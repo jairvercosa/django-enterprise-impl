@@ -2,6 +2,7 @@ from uuid import UUID, uuid4
 from typing import Optional
 
 from ..values.password import Password
+from ..interfaces.icredential import ICredential
 from .encryptor import Encryptor, IEncryptor
 
 
@@ -9,7 +10,7 @@ class CredentialValueError(Exception):
     pass
 
 
-class Credential:
+class Credential(ICredential):
 
     def __init__(
         self,
@@ -54,7 +55,7 @@ class Credential:
         username: str,
         password: str,
         uuid: Optional[UUID]=None,
-    ):
+    ) -> ICredential:
         uuid = uuid or uuid4()
 
         if not all([user_uuid, username, password]):

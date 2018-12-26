@@ -4,14 +4,10 @@ from uuid import UUID
 from typing import Optional
 
 
-class ICredential:
+class ICredential(metaclass=abc.ABCMeta):
 
     @abc.abstractproperty
     def uuid(self) -> UUID:
-        pass
-
-    @abc.abstractproperty
-    def user_uuid(self) -> UUID:
         pass
 
     @abc.abstractproperty

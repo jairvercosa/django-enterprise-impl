@@ -10,7 +10,7 @@ PASSWORD_TEST = 'P@ssword99'
 
 class CrendentialRepository(ICredentialRepository):
 
-    def find(self, pk):
+    def find(self, uuid):
         pass
 
     def find_by_username(self, username):
@@ -19,23 +19,26 @@ class CrendentialRepository(ICredentialRepository):
             PASSWORD_TEST
         )
 
+    def update_password(self, credential):
+        pass
+
 
 class TestExecute:
 
     def test_when_username_or_password_does_not_match_returns_false(self):
-        user_case = AuthenticateUser(
+        use_case = AuthenticateUser(
             CrendentialRepository(),
             'johnsmith',
             'P@sssword99'
         )
 
-        assert user_case.execute() is False
+        assert use_case.execute() is False
 
     def test_when_username_and_password_match_returns_true(self):
-        user_case = AuthenticateUser(
+        use_case = AuthenticateUser(
             CrendentialRepository(),
             'johnsmith',
             PASSWORD_TEST
         )
 
-        assert user_case.execute() is True
+        assert use_case.execute() is True

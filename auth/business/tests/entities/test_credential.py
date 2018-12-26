@@ -24,11 +24,6 @@ class TestFactory:
             uuid_value = uuid4()
             Credential.factory(None, 'p@ssworD9', uuid_value)
 
-    def test_when_has_no_password_raises_credential_value_error(self):
-        with pytest.raises(CredentialValueError):
-            uuid_value = uuid4()
-            Credential.factory('username', None, uuid_value)
-
     def test_returns_credential_instance(self):
         uuid_value = uuid4()
         result = Credential.factory(
@@ -133,3 +128,25 @@ class TestEq:
         )
 
         assert bool(crendencial_a == crendencial_b) is True
+
+
+class TestVerifyPassword:
+
+    def test_when_password_does_not_match_return_false(self):
+        credential = Credential.factory(
+            username='johnsmith',
+            uuid=uuid4()
+        )
+        credential.set_password('P@ssword9')
+
+        assert credential.verify_password('P@sssword9') is False
+
+    def test_when_password_does_match_return_true(self):
+        password = 'P@ssword9'
+        credential = Credential.factory(
+            username='johnsmith',
+            uuid=uuid4()
+        )
+        credential.set_password(password)
+
+        assert credential.verify_password(password) is True

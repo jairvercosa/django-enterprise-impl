@@ -1,5 +1,5 @@
 import re
-from typing import Callable
+from typing import Optional
 
 from ..entities.encryptor import IEncryptor
 
@@ -10,9 +10,9 @@ class PasswordStrengthError(Exception):
 
 class Password:
 
-    def __init__(self, encryptor: IEncryptor):
+    def __init__(self, encryptor: IEncryptor, value: Optional[str]=None):
         self._encryptor = encryptor
-        self._value = None
+        self._value = value
 
     @property
     def value(self) -> str:
@@ -37,6 +37,8 @@ class Password:
             1 uppercase letter or more
             1 lowercase letter or more
         """
+        if value is None:
+            return False, {}
 
         length = cls._validate_length(value)
         digit = cls._validate_digit(value)

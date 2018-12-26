@@ -15,6 +15,17 @@ class FakeEncryptor(IEncryptor):
         return encrypted == value + 'encrypt'
 
 
+class TestInit:
+
+    def test_set_value_without_encryption(self):
+        password = Password(FakeEncryptor, 'password')
+        assert password.value == 'password'
+
+    def test_when_password_is_not_passed_in_set_value_none(self):
+        password = Password(FakeEncryptor)
+        assert password.value is None
+
+
 class TestPasswordValueSetter:
 
     def test_when_password_is_not_strong_raises_password_strength_error(self):
@@ -31,6 +42,10 @@ class TestPasswordValueSetter:
 
 
 class TestValidateStrength:
+
+    def test_when_password_is_none_returns_false(self):
+        result, _ = Password.validate_strength(None)
+        assert result is False
 
     def test_when_password_length_less_than_8_returns_legth_false_on_the_dict(self):
         _, result = Password.validate_strength('pass')

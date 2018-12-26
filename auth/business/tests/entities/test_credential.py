@@ -83,3 +83,60 @@ class TestPasswordSetter:
         cred.set_password('New_p@ssw0rd')
 
         assert old_pass != cred.password
+
+
+class TestEq:
+
+    def test_when_username_is_different_returns_false(self):
+        uuid_value = uuid4()
+        crendencial_a = Credential.factory(
+            uuid_value,
+            uuid_value,
+            'usernameA',
+            'P@ssword9'
+        )
+
+        crendencial_b = Credential.factory(
+            uuid_value,
+            uuid_value,
+            'usernameB',
+            'P@ssword9'
+        )
+
+        assert bool(crendencial_a == crendencial_b) is False
+
+    def test_when_password_is_different_returns_false(self):
+        uuid_value = uuid4()
+        crendencial_a = Credential.factory(
+            uuid_value,
+            uuid_value,
+            'usernameA',
+            'P@ssword8'
+        )
+
+        crendencial_b = Credential.factory(
+            uuid_value,
+            uuid_value,
+            'usernameA',
+            'P@ssword9'
+        )
+
+        assert bool(crendencial_a == crendencial_b) is False
+
+    def test_when_username_and_password_are_equal_returns_true(self):
+        uuid_value = uuid4()
+        crendencial_a = Credential.factory(
+            uuid_value,
+            uuid_value,
+            'usernameA',
+            'P@ssword9'
+        )
+
+        crendencial_b = Credential.factory(
+            uuid_value,
+            uuid_value,
+            'usernameA',
+            'P@ssword9'
+        )
+
+        assert bool(crendencial_a == crendencial_b) is True

@@ -25,6 +25,12 @@ class Credential:
         self._password = Password(encryptor)
         self._password.value = password
 
+    def __eq__(self, value: 'Credencial') -> bool:
+        return (
+            self.username == value.username and
+            self._password.value == value.password
+        )
+
     @property
     def uuid(self) -> UUID:
         return self._uuid

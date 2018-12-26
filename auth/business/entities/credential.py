@@ -1,4 +1,4 @@
-from uuid import UUID
+from uuid import UUID, uuid4
 from typing import Optional
 
 from ..values.password import Password
@@ -50,12 +50,14 @@ class Credential:
     @classmethod
     def factory(
         cls,
-        uuid: UUID,
         user_uuid: UUID,
         username: str,
-        password: str
+        password: str,
+        uuid: Optional[UUID]=None,
     ):
-        if not all([uuid, user_uuid, username, password]):
+        uuid = uuid or uuid4()
+
+        if not all([user_uuid, username, password]):
             raise CredentialValueError("All argments are required")
 
         return cls(uuid, user_uuid, username, password)

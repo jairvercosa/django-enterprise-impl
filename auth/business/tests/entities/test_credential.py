@@ -1,36 +1,36 @@
 import pytest
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from auth.business.entities.credential import Credential, CredentialValueError
 
 
 class TestFactory:
 
-    def test_when_has_no_uuid_raises_credential_value_error(self):
-        with pytest.raises(CredentialValueError):
-            Credential.factory(None, uuid4(), 'username', 'p@ssworD9')
+    def test_when_has_no_uuid_adds_a_uuid(self):
+        credencial = Credential.factory(uuid4(), 'username', 'p@ssworD9')
+        assert  isinstance(credencial.uuid, UUID)
 
     def test_when_has_no_user_uuid_raises_credential_value_error(self):
         with pytest.raises(CredentialValueError):
-            Credential.factory(uuid4(), None, 'username', 'p@ssworD9')
+            Credential.factory(None, 'username', 'p@ssworD9', uuid4())
 
     def test_when_has_no_username_raises_credential_value_error(self):
         with pytest.raises(CredentialValueError):
             uuid_value = uuid4()
-            Credential.factory(uuid_value, uuid_value, None, 'p@ssworD9')
+            Credential.factory(uuid_value, None, 'p@ssworD9', uuid_value)
 
     def test_when_has_no_password_raises_credential_value_error(self):
         with pytest.raises(CredentialValueError):
             uuid_value = uuid4()
-            Credential.factory(uuid_value, uuid_value, 'username', None)
+            Credential.factory(uuid_value, 'username', None, uuid_value)
 
     def test_returns_credential_instance(self):
         uuid_value = uuid4()
         result = Credential.factory(
             uuid_value,
-            uuid_value,
             'username',
-            'p@ssworD9'
+            'p@ssworD9',
+            uuid_value,
         )
 
         assert isinstance(result, Credential)
@@ -49,9 +49,9 @@ class TestCredentialProperties:
 
         self.credential = Credential.factory(
             self.params['uuid'],
-            self.params['uuid'],
             self.params['username'],
             self.params['password'],
+            self.params['uuid'],
         )
 
     def test_uuid(self):
@@ -74,9 +74,9 @@ class TestPasswordSetter:
 
         cred = Credential.factory(
             uuid_value,
-            uuid_value,
             'username',
-            'p@ssworD9'
+            'p@ssworD9',
+            uuid_value,
         )
 
         old_pass = cred.password
@@ -91,16 +91,16 @@ class TestEq:
         uuid_value = uuid4()
         crendencial_a = Credential.factory(
             uuid_value,
-            uuid_value,
             'usernameA',
-            'P@ssword9'
+            'P@ssword9',
+            uuid_value,
         )
 
         crendencial_b = Credential.factory(
             uuid_value,
-            uuid_value,
             'usernameB',
-            'P@ssword9'
+            'P@ssword9',
+            uuid_value,
         )
 
         assert bool(crendencial_a == crendencial_b) is False
@@ -109,16 +109,16 @@ class TestEq:
         uuid_value = uuid4()
         crendencial_a = Credential.factory(
             uuid_value,
-            uuid_value,
             'usernameA',
-            'P@ssword8'
+            'P@ssword8',
+            uuid_value,
         )
 
         crendencial_b = Credential.factory(
             uuid_value,
-            uuid_value,
             'usernameA',
-            'P@ssword9'
+            'P@ssword9',
+            uuid_value,
         )
 
         assert bool(crendencial_a == crendencial_b) is False
@@ -127,16 +127,16 @@ class TestEq:
         uuid_value = uuid4()
         crendencial_a = Credential.factory(
             uuid_value,
-            uuid_value,
             'usernameA',
-            'P@ssword9'
+            'P@ssword9',
+            uuid_value,
         )
 
         crendencial_b = Credential.factory(
             uuid_value,
-            uuid_value,
             'usernameA',
-            'P@ssword9'
+            'P@ssword9',
+            uuid_value,
         )
 
         assert bool(crendencial_a == crendencial_b) is True

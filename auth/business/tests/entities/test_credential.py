@@ -10,6 +10,16 @@ class TestFactory:
         credencial = Credential.factory(uuid4(), 'username', 'p@ssworD9')
         assert  isinstance(credencial.uuid, UUID)
 
+    def test_when_has_uuid_keeps_what_was_setted(self):
+        uuid_value = uuid4()
+        credencial = Credential.factory(
+            uuid_value,
+            'username',
+            'p@ssworD9',
+            uuid_value
+        )
+        assert credencial.uuid == uuid_value
+
     def test_when_has_no_user_uuid_raises_credential_value_error(self):
         with pytest.raises(CredentialValueError):
             Credential.factory(None, 'username', 'p@ssworD9', uuid4())

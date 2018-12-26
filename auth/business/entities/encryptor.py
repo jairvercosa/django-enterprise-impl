@@ -17,3 +17,7 @@ class Encryptor(IEncryptor):
 
         salt = str.encode(cls.__salt)
         return argon2.using(rounds=4, salt=salt).hash(value)
+
+    @classmethod
+    def verify(cls, value: str, encrypted: str) -> bool:
+        return argon2.verify(value, encrypted)

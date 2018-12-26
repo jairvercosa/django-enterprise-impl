@@ -1,6 +1,6 @@
 import pytest
 
-from ..encryptor import Encryptor, EncryptorExpectedTypeError
+from auth.business.entities.encryptor import Encryptor, EncryptorExpectedTypeError
 
 
 class TestEncrypt:

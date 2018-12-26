@@ -18,11 +18,11 @@ class Password:
     def value(self) -> str:
         return self._value
 
-    def __req__(self):
+    def __repr__(self):
         return '< Password object {}>'.format(self._value)
 
     def __eq__(self, value: str) -> bool:
-        return self._value == value
+        return self._encryptor.verify(value, self._value)
 
     @classmethod
     def validate_strength(cls, value: str) -> (bool, dict):

@@ -6,9 +6,13 @@ from auth.business.values.password import Password, PasswordStrengthError
 
 class FakeEncryptor(IEncryptor):
 
-    @staticmethod
-    def encrypt(value):
+    @classmethod
+    def encrypt(cls, value):
         return value + 'encrypt'
+
+    @classmethod
+    def verify(cls, value, encrypted):
+        return encrypted == value + 'encrypt'
 
 
 class TestPasswordValueSetter:
@@ -91,3 +95,28 @@ class TestValidateStrength:
     def test_when_password_is_strong_returns_true(self):
         result, _  = Password.validate_strength('p@ssworD9')
         assert result is True
+
+
+class TestEq:
+
+    def test_when_value_is_different_from_original_password_value_returns_false(self):
+        pass_a = Password(FakeEncryptor)
+        pass_a.value = 'P@ssword9'
+        
+        assert bool(pass_a == 'p@ssword9') is False
+
+    def test_when_value_is_equal_from_original_password_value_returns_true(self):
+        original_password = 'P@ssword9'
+        pass_a = Password(FakeEncryptor)
+        pass_a.value = original_password
+        
+        assert bool(pass_a == original_password) is True
+
+
+class TestReq:
+
+    def test_has_encrypted_value(self):
+        pass_a = Password(FakeEncryptor)
+        pass_a.value = 'P@ssword9'
+
+        assert pass_a.value in str(pass_a)

@@ -1,6 +1,6 @@
 import abc
 
-from auth.business.interfaces.icredential import ICredential
+from ..interfaces.icredential import ICredential
 
 
 class ICredentialRepository(metaclass=abc.ABCMeta):

@@ -1,0 +1,4 @@
+
+
+class CredentialNotFound(Exception):
+    pass

@@ -19,4 +19,7 @@ class CheckCredential(IUseCase):
             self._credential.username
         )
 
-        return user_credential == self._credential
+        return (
+            user_credential.active and
+            user_credential == self._credential
+        )

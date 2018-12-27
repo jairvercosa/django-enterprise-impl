@@ -5,19 +5,14 @@ from auth.business.interfaces.icredential_repository import (
 )
 
 
+USERNAME_TEST = 'johnsmith'
 PASSWORD_TEST = 'P@ssword99'
 
 
-class CrendentialRepository(ICredentialRepository):
-
+class AbstractRepository(ICredentialRepository):
+    
     def find(self, uuid):
         pass
-
-    def find_by_username(self, username):
-        return Credential.factory(
-            username,
-            PASSWORD_TEST
-        )
 
     def update_password(self, credential):
         pass
@@ -29,21 +24,58 @@ class CrendentialRepository(ICredentialRepository):
         pass
 
 
+class CredentialRepository(AbstractRepository):
+
+    def find_by_username(self, username):
+        return Credential.factory(
+            USERNAME_TEST,
+            PASSWORD_TEST
+        )
+
+
+class CredentialRepositoryDeactivated(AbstractRepository):
+
+    def find_by_username(self, username):
+        return Credential.factory(
+            USERNAME_TEST,
+            PASSWORD_TEST,
+            active=False
+        )
+
+
 class TestExecute:
 
-    def test_when_username_or_password_does_not_match_returns_false(self):
+    def test_when_username_does_not_match_returns_false(self):
         use_case = CheckCredential(
-            CrendentialRepository(),
-            'johnsmith',
-            'P@sssword99'
+            CredentialRepository(),
+            'john',
+            PASSWORD_TEST
         )
 
         assert use_case.execute() is False
 
-    def test_when_username_and_password_match_returns_true(self):
+    def test_when_password_does_not_match_returns_false(self):
         use_case = CheckCredential(
-            CrendentialRepository(),
-            'johnsmith',
+            CredentialRepository(),
+            USERNAME_TEST,
+            'P@sssword999'
+        )
+
+        assert use_case.execute() is False
+
+    def test_when_credential_is_not_active_returns_false(self):
+        use_case = CheckCredential(
+            CredentialRepositoryDeactivated(),
+            USERNAME_TEST,
+            PASSWORD_TEST
+        )
+
+        assert use_case.execute() is False
+
+    def test_when_username_and_password_match_and_credential_is_active_returns_true(self):
+        use_case = CheckCredential(
+            CredentialRepository(),
+            USERNAME_TEST,
             PASSWORD_TEST
         )
 

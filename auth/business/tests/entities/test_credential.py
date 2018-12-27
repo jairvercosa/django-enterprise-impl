@@ -21,19 +21,26 @@ class TestFactory:
 
     def test_when_has_no_username_raises_credential_value_error(self):
         with pytest.raises(CredentialValueError):
-            uuid_value = uuid4()
-            Credential.factory(None, 'p@ssworD9', uuid_value)
+            Credential.factory(None, 'p@ssworD9', uuid4())
 
     def test_returns_credential_instance(self):
-        uuid_value = uuid4()
         result = Credential.factory(
             'username',
             'p@ssworD9',
-            uuid_value,
+            uuid4(),
         )
 
         assert isinstance(result, Credential)
 
+    def test_when_password_is_passed_preserves_the_value(self):
+        password = 'p@ssworD9'
+        result = Credential.factory(
+            'username',
+            password,
+            uuid4(),
+        )
+
+        assert result.password == password
 
 
 class TestCredentialProperties:

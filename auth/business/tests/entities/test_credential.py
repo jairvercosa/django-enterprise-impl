@@ -44,12 +44,14 @@ class TestCredentialProperties:
             "uuid": uuid_value,
             "username": "John Math",
             "password": "P@ssword9",
+            "active": True
         }
 
         self.credential = Credential.factory(
             self.params['username'],
             self.params['password'],
             self.params['uuid'],
+            self.params['active'],
         )
 
     def test_uuid(self):
@@ -60,6 +62,9 @@ class TestCredentialProperties:
 
     def test_password(self):
         assert bool(self.credential.password)
+
+    def test_active(self):
+        assert not (self.credential.active is None)
 
 
 class TestPasswordSetter:
@@ -150,3 +155,16 @@ class TestVerifyPassword:
         credential.set_password(password)
 
         assert credential.verify_password(password) is True
+
+
+class TestDeactivate:
+
+    def test_set_active_equals_false(self):
+        credential = Credential.factory(
+            username='johnsmith',
+            active=True
+        )
+
+        credential.deactivate()
+        assert credential.active is False
+        

@@ -17,11 +17,13 @@ class Credential(ICredential):
         uuid: UUID,
         username: str,
         password: Optional[str]=None,
-        encryptor: IEncryptor=Encryptor
+        encryptor: IEncryptor=Encryptor,
+        active: Optional[bool]=True
     ):
         self._uuid = uuid
         self._username = username
         self._password = Password(encryptor, password)
+        self._active = active
 
     def __eq__(self, value: 'Credencial') -> bool:
         return (
@@ -41,22 +43,35 @@ class Credential(ICredential):
     def password(self) -> str:
         return self._password.value
 
+    @property
+    def active(self) -> bool:
+        return self._active
+
     @classmethod
     def factory(
         cls,
         username: str,
         password: Optional[str]=None,
         uuid: Optional[UUID]=None,
+        active: Optional[bool]=True
     ) -> ICredential:
         uuid = uuid or uuid4()
 
         if not username:
             raise CredentialValueError("All argments are required")
 
-        return cls(uuid, username, password)
+        return cls(
+            uuid=uuid,
+            username=username,
+            password=password,
+            active=active
+        )
 
     def set_password(self, value: str):
         self._password.value = value
 
     def verify_password(self, value: str) -> bool:
         return self._password == value
+    
+    def deactivate(self):
+        self._active = False

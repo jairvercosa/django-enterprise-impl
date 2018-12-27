@@ -124,3 +124,32 @@ class TestUpdate:
         result = repository.update(credential)
 
         assert instance.is_active is False
+
+
+class TestCreate:
+
+    def test_persist_create(self, mocker):
+        uuid = uuid4()
+
+        credential = Credential.factory(
+            uuid=uuid,
+            username='johnsmith',
+            password='$argon2i$v=19$m=102400,t=4,p=8$NDkyTUlqJE0$K4PWIcRV17QtJn++dv4YqA',
+            active=True
+        )
+        mock_manager = mocker.Mock()
+        mock_manager.create = mocker.MagicMock(
+            return_value=UserAccount(
+                uuid=credential.uuid,
+                username=credential.username,
+                password=credential.password,
+                is_active=credential.active,
+            )
+        )
+        class FakeModel:
+            objects = mock_manager
+
+        repository = DjangoCredentialRepository(FakeModel())
+        result = repository.create(credential)
+
+        assert result == credential

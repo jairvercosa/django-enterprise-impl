@@ -46,7 +46,7 @@ class DjangoCredentialRepository(ICredentialRepository):
         instance = self._model.objects.create(
             username=credential.username,
             password=credential.password,
-            active=credential.active
+            is_active=credential.active
         )
 
         return self._factory_credential(instance)

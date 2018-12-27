@@ -21,3 +21,7 @@ class ICredentialRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def update(self, credential: ICredential) -> ICredential:
         pass
+
+    @abc.abstractmethod
+    def create(self, credential: ICredential) -> ICredential:
+        pass

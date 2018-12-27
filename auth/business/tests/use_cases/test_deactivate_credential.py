@@ -25,6 +25,9 @@ class CredentialRepository(ICredentialRepository):
     def update(self, credential):
         return credential
 
+    def create(self, credential):
+        pass
+
 
 class TestExecute:
 

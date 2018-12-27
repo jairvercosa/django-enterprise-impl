@@ -22,6 +22,9 @@ class CrendentialRepository(ICredentialRepository):
     def update_password(self, credential):
         pass
 
+    def update(self, credential):
+        pass
+
 
 class TestExecute:
 

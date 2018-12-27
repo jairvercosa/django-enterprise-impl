@@ -3,7 +3,7 @@ from ..interfaces.icredential_repository import ICredentialRepository
 from ..interfaces.iuse_case import IUseCase
 
 
-class AuthenticateUser(IUseCase):
+class CheckCredential(IUseCase):
 
     def __init__(
         self,

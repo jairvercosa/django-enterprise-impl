@@ -37,7 +37,6 @@ class TestFind:
 
 
 class TestFindByUserName:
-    user_name = 'johnsmith'
 
     def test_when_object_does_not_exist_returns_none(self, mocker):
         class FakeModel:
@@ -69,7 +68,6 @@ class TestFindByUserName:
 
 
 class TestUpdatePassword:
-    user_name = 'johnsmith'
 
     def setup_method(self):
         uuid = uuid4()
@@ -99,3 +97,30 @@ class TestUpdatePassword:
     
     def test_returns_credential_instance(self, mocker):
         assert isinstance(self._result, Credential)
+
+
+class TestUpdate:
+
+    def test_update_active(self):
+        uuid = uuid4()
+
+        instance = UserAccount(
+            uuid=uuid,
+            username='johnsmith',
+            password='$argon2i$v=19$m=102400,t=4,p=8$NDkyTUlqJE0$K4PWIcRV17QtJn++dv4YqA',
+            is_active=True
+        )
+
+        mockset = MockSet(instance, **{
+            'model': UserAccount
+        })
+        class FakeModel:
+            objects = mockset
+
+        repository = DjangoCredentialRepository(FakeModel())
+        credential = repository.find(uuid)
+        credential.deactivate()
+
+        result = repository.update(credential)
+
+        assert instance.is_active is False

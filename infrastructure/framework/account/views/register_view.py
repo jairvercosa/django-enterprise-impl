@@ -27,7 +27,7 @@ class RegisterView(FormView):
         return super().form_valid(form)
 
     def _execute_usecase(self, form):
-        usecase = self._get_usecase(form)
+        usecase = self._factory_usecase(form)
 
         try:
             usecase.execute()
@@ -36,7 +36,7 @@ class RegisterView(FormView):
         except PasswordStrengthError as ex:
             form.add_error('password', str(ex))
 
-    def _get_usecase(self, form):
+    def _factory_usecase(self, form):
         repository = DjangoCredentialRepository(UserAccount)
         return CreateCredential(
             credential_repository=repository,

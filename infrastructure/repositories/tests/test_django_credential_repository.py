@@ -3,8 +3,13 @@ from collections import namedtuple
 from django_mock_queries.query import MockSet
 
 from auth.business.entities.credential import Credential
-from web.account.models import UserAccount
-from repositories.django_credential_repository import DjangoCredentialRepository
+
+from infrastructure.repositories.django_credential_repository import (
+    DjangoCredentialRepository
+)
+
+# Django model
+from account.models import UserAccount
 
 
 class TestFind:

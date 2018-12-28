@@ -14,6 +14,7 @@
         <div>
             <form method="post" action="{{ request.get_full_path }}" >
                 {% csrf_token %}
+                <p>{{ form.error }}</p>
                 <div>
                     <div>
                         <label for="username">{{ form.username.label }}</label>
@@ -21,7 +22,7 @@
                     <div>
                         {{ form.username }}
                     </div>
-                    <p>{{ form.username.error }}</p>
+                    <p>{{ form.username.errors }}</p>
                 </div>
                 <div>
                     <div>
@@ -30,7 +31,7 @@
                     <div>
                         {{ form.password }}
                     </div>
-                    <p>{{ form.password.error }}</p>
+                    <p>{{ form.password.errors }}</p>
                 </div>
                 <div>
                     <div>
@@ -39,7 +40,7 @@
                     <div>
                         {{ form.confirm_password }}
                     </div>
-                    <p>{{ form.confirm_password.error }}</p>
+                    <p>{{ form.confirm_password.errors }}</p>
                 </div>
                 <div>
                     <button type="submit">Register</button>

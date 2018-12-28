@@ -20,12 +20,14 @@ class RegisterView(FormView):
     success_url = reverse_lazy('summary')
 
     def form_valid(self, form):
-        repository = DjangoCredentialRepository(UserAccount)
-        usecase = CreateCredential(
-            credential_repository=repository,
-            username=form.data['username'],
-            password=form.data['password']
-        )
+        self._execute_usecase(form)
+        if form.errors:
+            return self.form_invalid(form)
+
+        return super().form_valid(form)
+
+    def _execute_usecase(self, form):
+        usecase = self._get_usecase(form)
 
         try:
             usecase.execute()
@@ -34,7 +36,10 @@ class RegisterView(FormView):
         except PasswordStrengthError as ex:
             form.add_error('password', str(ex))
 
-        if form.errors:
-            return self.form_invalid(form)
-
-        return super().form_valid(form)
+    def _get_usecase(self, form):
+        repository = DjangoCredentialRepository(UserAccount)
+        return CreateCredential(
+            credential_repository=repository,
+            username=form.data['username'],
+            password=form.data['password']
+        )

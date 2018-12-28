@@ -34,7 +34,6 @@ class RegisterView(FormView):
         except PasswordStrengthError as ex:
             form.add_error('password', str(ex))
 
-        print(form.errors)
         if form.errors:
             return self.form_invalid(form)
 
